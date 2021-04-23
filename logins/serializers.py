@@ -9,11 +9,11 @@ class UserSerializer(serializers.ModelSerializer):
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'password')
+        fields = ('id', 'username', 'password', 'email')
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
-        user = User.objects.create_user(username = validated_data['username'], password = validated_data['password'])
+        user = User.objects.create_user(username = validated_data['username'], password = validated_data['password'], email = validated_data['email'])
 
         return user
 
@@ -21,3 +21,10 @@ class LoginSerializer(serializers.ModelSerializer):
      class Meta:
          model=User
          fields=('username','password') 
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    model = User
+
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
